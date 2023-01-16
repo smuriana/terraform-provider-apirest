@@ -104,7 +104,7 @@ func dataSourceRestAPIRead(d *schema.ResourceData, meta interface{}) error {
 	idAttribute := d.Get("id_attribute").(string)
 
 	if debug {
-		log.Printf("datasource_api_object.go:\npath: %s\nsearch_path: %s\nquery_string: %s\nsearch_key: %s\nsearch_value: %s\nresults_key: %s\nid_attribute: %s", path, searchPath, queryString, searchKey, searchValue, resultsKey, idAttribute)
+		log.Printf("datasource_api_object.go:\npath: %s\nsearch_path: %s\nquery_string: %s\nsearch_key: %s\nsearch_value: %s\nresults_key: %s\nid_attribute: %s \ntracked_keys: %s ", path, searchPath, queryString, searchKey, searchValue, resultsKey, idAttribute, trackedKeys)
 	}
 
 	opts := &apiObjectOpts{
