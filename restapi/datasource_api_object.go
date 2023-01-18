@@ -44,7 +44,7 @@ func dataSourceRestAPI() *schema.Resource {
 				Type:        schema.TypeList,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Description: "A list of keys in the data structure that will be checked against the server's responses to detect drift. If the `data` field and the server's response for that field do not match, the provider will update the server. Like the `id_attribute`, this value can point to \"deep\" data by using /-delimited strings. It is recommended to set this to the top level keys of our `data` element.",
-				Required:    true,
+				Optional:    true,
 			},
 			"search_value": {
 				Type:        schema.TypeString,
