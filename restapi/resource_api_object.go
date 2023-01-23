@@ -291,6 +291,9 @@ func resourceRestAPIRead(d *schema.ResourceData, meta interface{}) error {
 						inconsistent_keys = append(inconsistent_keys, trackedKey)
 					}
 				}
+				if obj.apiClient.debug {
+					log.Printf("resource_api_object.go: tracked_key='%s', data='%s', api_data='%s'\n", trackedKey, obj.data[trackedKey], obj.apiData[trackedKey])
+				}
 			}
 		}
 
