@@ -98,13 +98,12 @@ func dataSourceRestAPIRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	searchKey := d.Get("search_key").(string)
-	trackedKeys := d.Get("tracked_keys").(string)
 	searchValue := d.Get("search_value").(string)
 	resultsKey := d.Get("results_key").(string)
 	idAttribute := d.Get("id_attribute").(string)
 
 	if debug {
-		log.Printf("datasource_api_object.go:\npath: %s\nsearch_path: %s\nquery_string: %s\nsearch_key: %s\nsearch_value: %s\nresults_key: %s\nid_attribute: %s \ntracked_keys: %s ", path, searchPath, queryString, searchKey, searchValue, resultsKey, idAttribute, trackedKeys)
+		log.Printf("datasource_api_object.go:\npath: %s\nsearch_path: %s\nquery_string: %s\nsearch_key: %s\nsearch_value: %s\nresults_key: %s\nid_attribute: %s", path, searchPath, queryString, searchKey, searchValue, resultsKey, idAttribute)
 	}
 
 	opts := &apiObjectOpts{

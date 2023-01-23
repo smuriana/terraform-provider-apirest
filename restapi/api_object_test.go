@@ -197,6 +197,17 @@ func TestAPIObject(t *testing.T) {
 		}
 	})
 
+	/* Verify tracked_keys detect an insconsistence between API and terraform state before update the object */
+	t.Run("detect_insconstence_on_tracked_keys", func(t *testing.T) {
+		if testDebug {
+			log.Printf("api_object_test.go: Testing tracked_keys")
+		}
+		svr.GetServer()
+		if testingObjects["normal"].data["Thing"].(string) == "" {
+			t.Fatalf("api_object_test.go: copy_keys for 'normal' object failed. Expected 'Thing' to be non-empty, but got '%+v'\n", testingObjects["normal"].data["Thing"])
+		}
+	})
+
 	/* Go ahead and update one of our objects */
 	t.Run("update_object", func(t *testing.T) {
 		if testDebug {
@@ -311,4 +322,5 @@ func TestAPIObject(t *testing.T) {
 	if testDebug {
 		log.Println("api_object_test.go: Done")
 	}
+
 }

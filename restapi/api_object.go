@@ -27,6 +27,7 @@ type apiObjectOpts struct {
 	queryString   string
 	debug         bool
 	readSearch    map[string]string
+	trackedKeys   map[string]string
 	id            string
 	idAttribute   string
 	data          string
@@ -124,6 +125,7 @@ func NewAPIObject(iClient *APIClient, opts *apiObjectOpts) (*APIObject, error) {
 		readSearch:    opts.readSearch,
 		id:            opts.id,
 		idAttribute:   opts.idAttribute,
+		trackedKeys:   opts.trackedKeys,
 		data:          make(map[string]interface{}),
 		updateData:    make(map[string]interface{}),
 		destroyData:   make(map[string]interface{}),
@@ -202,6 +204,7 @@ func (obj *APIObject) toString() string {
 	buffer.WriteString(fmt.Sprintf("destroy_method: %s\n", obj.destroyMethod))
 	buffer.WriteString(fmt.Sprintf("debug: %t\n", obj.debug))
 	buffer.WriteString(fmt.Sprintf("read_search: %s\n", spew.Sdump(obj.readSearch)))
+	buffer.WriteString(fmt.Sprintf("tracked_keys: %s\n", spew.Sdump(obj.trackedKeys)))
 	buffer.WriteString(fmt.Sprintf("data: %s\n", spew.Sdump(obj.data)))
 	buffer.WriteString(fmt.Sprintf("update_data: %s\n", spew.Sdump(obj.updateData)))
 	buffer.WriteString(fmt.Sprintf("destroy_data: %s\n", spew.Sdump(obj.destroyData)))
