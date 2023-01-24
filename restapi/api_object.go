@@ -27,7 +27,7 @@ type apiObjectOpts struct {
 	queryString   string
 	debug         bool
 	readSearch    map[string]string
-	trackedKeys   map[string]string
+	trackedKeys   []string
 	id            string
 	idAttribute   string
 	data          string
@@ -48,7 +48,7 @@ type APIObject struct {
 	queryString   string
 	debug         bool
 	readSearch    map[string]string
-	trackedKeys   map[string]string
+	trackedKeys   []string
 	id            string
 	idAttribute   string
 
