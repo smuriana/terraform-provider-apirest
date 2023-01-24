@@ -450,16 +450,21 @@ func buildAPIObjectOpts(d *schema.ResourceData) (*apiObjectOpts, error) {
 	if v, ok := d.GetOk("query_string"); ok {
 		opts.queryString = v.(string)
 	}
-	if v, ok := d.GetOk("tracked_keys"); ok {
-		opts.trackedKeys = v.([]string)
-	}
 
+	opts.trackedKeys = expandTrackedKey(d.Get("tracked_keys").([]interface{}))
 	readSearch := expandReadSearch(d.Get("read_search").(map[string]interface{}))
 	opts.readSearch = readSearch
 	opts.data = d.Get("data").(string)
 	opts.debug = d.Get("debug").(bool)
 
 	return opts, nil
+}
+
+func expandTrackedKey(arr []interface{}) (trackedKeys []string) {
+	for _, v := range arr {
+		trackedKeys = append(trackedKeys, v.(string))
+	}
+	return
 }
 
 func expandReadSearch(v map[string]interface{}) (readSearch map[string]string) {
