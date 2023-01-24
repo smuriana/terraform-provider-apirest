@@ -182,9 +182,16 @@ func NewAPIObject(iClient *APIClient, opts *apiObjectOpts) (*APIObject, error) {
 		}
 	}
 
+	if len(opts.trackedKeys) > 1 {
+		if opts.debug {
+			log.Printf("api_object.go: Parsing tracked_keys: %s", opts.trackedKeys)
+		}
+	}
+
 	if opts.debug {
 		log.Printf("api_object.go: Constructed object: %s", obj.toString())
 	}
+
 	return &obj, nil
 }
 
