@@ -281,7 +281,7 @@ func resourceRestAPIRead(d *schema.ResourceData, meta interface{}) error {
 		log.Printf("resource_api_object.go: Read resource. Returned id is '%s'\n", obj.id)
 		id_to_set := obj.id
 
-		inconsistent_keys := make([]string, 0)
+		inconsistent_keys := []string{}
 
 		if iTrackedKeys := d.Get("tracked_key"); iTrackedKeys != nil {
 			for _, v := range iTrackedKeys.([]interface{}) {
