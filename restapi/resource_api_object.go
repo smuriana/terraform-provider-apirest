@@ -280,10 +280,8 @@ func resourceRestAPIRead(d *schema.ResourceData, meta interface{}) error {
 		/* Setting terraform ID tells terraform the object was created or it exists */
 		log.Printf("resource_api_object.go: Read resource. Returned id is '%s'\n", obj.id)
 		id_to_set := obj.id
-
 		inconsistent_keys := []string{}
-
-		if iTrackedKeys := d.Get("tracked_key"); iTrackedKeys != nil {
+		if iTrackedKeys := d.Get("tracked_keys"); iTrackedKeys != nil {
 			for _, v := range iTrackedKeys.([]interface{}) {
 				trackedKey := v.(string)
 				if _, apiValue := obj.apiData[trackedKey]; apiValue {
