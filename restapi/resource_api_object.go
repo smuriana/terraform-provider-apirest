@@ -280,29 +280,56 @@ func resourceRestAPIRead(d *schema.ResourceData, meta interface{}) error {
 		/* Setting terraform ID tells terraform the object was created or it exists */
 		log.Printf("resource_api_object.go: Read resource. Returned id is '%s'\n", obj.id)
 		id_to_set := obj.id
-		inconsistent_keys := []string{}
-		if iTrackedKeys := d.Get("tracked_keys"); iTrackedKeys != nil {
-			for _, v := range iTrackedKeys.([]interface{}) {
-				trackedKey := v.(string)
-				if _, apiValue := obj.apiData[trackedKey]; apiValue {
-					if obj.data[trackedKey] != obj.apiData[trackedKey] {
-						inconsistent_keys = append(inconsistent_keys, trackedKey)
-					}
-				}
-				if obj.apiClient.debug {
-					log.Printf("resource_api_object.go: tracked_key='%s', data='%s', api_data='%s'\n", trackedKey, obj.data[trackedKey], obj.apiData[trackedKey])
-				}
-			}
-		}
+		inconsistents := getInconsistents(d.Get("tracked_keys"), obj)
 
-		if len(inconsistent_keys) > 0 {
-			return fmt.Errorf("Terraform state corrupted, keys [%s]", strings.Join(inconsistent_keys, ", "))
+		if len(inconsistents) > 0 {
+			return fmt.Errorf("Terraform state corrupted, keys [%s]", strings.Join(inconsistents, ", "))
 		}
 
 		/* Setting terraform ID tells terraform the object was created or it exists */
 		d.SetId(id_to_set)
 	}
 	return err
+}
+
+func getInconsistents(trackedKeys interface{}, obj *APIObject) []string {
+	inconsistent_keys := []string{}
+	if trackedKeys != nil {
+		for _, v := range trackedKeys.([]interface{}) {
+			trackedKey := v.(string)
+			dataValue, dataFound := searchKey(obj.data, trackedKey)
+			apiDataValue, apiDataFound := searchKey(obj.apiData, trackedKey)
+			if obj.apiClient.debug {
+				if !dataFound {
+					log.Printf("resource_api_object.go: Key '%s' not found in data Json\n", trackedKey)
+				}
+				if !apiDataFound {
+					log.Printf("resource_api_object.go: Key '%s' not found in api data Json\n", trackedKey)
+				}
+			}
+			if (dataFound && apiDataFound) && (dataValue != apiDataValue) {
+				if obj.apiClient.debug {
+					log.Printf("resource_api_object.go: tracked_key='%s', data='%s', api_data='%s'\n", trackedKey, obj.data[trackedKey], obj.apiData[trackedKey])
+				}
+				inconsistent_keys = append(inconsistent_keys, trackedKey)
+			}
+		}
+	}
+	return inconsistent_keys
+}
+
+func searchKey(data map[string]interface{}, key string) (interface{}, bool) {
+	for k, v := range data {
+		if k == key {
+			return v, true
+		}
+		if submap, ok := v.(map[string]interface{}); ok {
+			if val, found := searchKey(submap, key); found {
+				return val, found
+			}
+		}
+	}
+	return nil, false
 }
 
 func resourceRestAPIUpdate(d *schema.ResourceData, meta interface{}) error {
